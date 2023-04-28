@@ -25,6 +25,6 @@ if __name__ == "__main__":
         weather.getTempData()
         weather.getRainData()
         youbike.getData()
-        time.sleep(5)
+        time.sleep(300)
         
         os.chdir("..")
