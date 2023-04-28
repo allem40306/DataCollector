@@ -1,6 +1,6 @@
 import os
 import time
-import datetime
+from datetime import datetime,timezone,timedelta
 import weather
 import youbike
 
@@ -13,7 +13,8 @@ if __name__ == "__main__":
     os.chdir("data")
 
     while True:
-        now = datetime.datetime.now()
+        now = datetime.utcnow().replace(tzinfo=timezone.utc)
+        now = now.astimezone(timezone(timedelta(hours=8)))
         timeStamp = now.strftime("%Y%m%d%H%M%S")
 
         try:
