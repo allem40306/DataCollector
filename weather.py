@@ -7,13 +7,17 @@ def getData(config):
     dataOut = []
 
     for item in dataIn:
-        metedata = {parameter: item[parameter] for parameter in ["lat","lon","locationName"]}
-        weather = {parameter["elementName"]:parameter["elementValue"] for parameter in item["weatherElement"]}
-        metedata.update({parameter: max(float(weather[parameter]),0.0) for parameter in config['parameter']})
-        city = {parameter["parameterName"]:parameter["parameterValue"] for parameter in item["parameter"]}["CITY"]
-        if city != "臺北市":
-            continue
-        dataOut.append(metedata)
+        try:
+            city = {parameter["parameterName"]:parameter["parameterValue"] for parameter in item["parameter"]}["CITY"]
+            if city != "臺北市":
+                continue
+
+            metedata = {parameter: item[parameter] for parameter in ["lat","lon","locationName"]}
+            weather = {parameter["elementName"]:parameter["elementValue"] for parameter in item["weatherElement"]}
+            metedata.update({parameter: max(float(weather[parameter]),0.0) for parameter in config['parameter']})
+            dataOut.append(metedata)
+        except:
+            pass
 
     with open(f"{ config['filename'] }.json", "w") as file:
             json.dump(dataOut, file)
