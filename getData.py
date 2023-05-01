@@ -19,7 +19,7 @@ if __name__ == "__main__":
         pass
     os.chdir("data")
     
-    logPath = f"{os.getcwd()}\log.txt"
+    logPath = f"{os.getcwd()}/log.txt"
     f = open(logPath,"a")
     f.close()
 
