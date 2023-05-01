@@ -18,6 +18,10 @@ if __name__ == "__main__":
     except:
         pass
     os.chdir("data")
+    
+    logPath = f"{os.getcwd()}\log.txt"
+    f = open(logPath,"a")
+    f.close()
 
     while True:
         t = time.time()
@@ -31,10 +35,14 @@ if __name__ == "__main__":
         except:
             pass
         os.chdir(timeStamp)
-
-        weather.getTempData()
-        weather.getRainData()
-        youbike.getData()
+        for fun in [weather.getTempData, weather.getRainData, youbike.getData]:
+            try:
+                fun()
+            except:
+                with open(logPath, "a") as f:
+                    f.write(f"error: { timeStamp }_{fun.__name__}\n")
+                f.close()
+                pass
 
         t = time.time() - t
         time.sleep(interval - t)
