@@ -23,28 +23,23 @@ if __name__ == "__main__":
     f = open(logPath,"a")
     f.close()
 
-    while True:
-        t = time.time()
+    now = datetime.utcnow().replace(tzinfo=timezone.utc)
+    now = now.astimezone(timezone(timedelta(hours=8)))
+    timeStamp = now.strftime("%Y%m%d%H%M%S")
 
-        now = datetime.utcnow().replace(tzinfo=timezone.utc)
-        now = now.astimezone(timezone(timedelta(hours=8)))
-        timeStamp = now.strftime("%Y%m%d%H%M%S")
+    try:
+        os.mkdir(timeStamp)
+    except:
+        pass
+    os.chdir(timeStamp)
 
+    for fun in [weather.getTempData, weather.getRainData, youbike.getData]:
         try:
-            os.mkdir(timeStamp)
+            fun()
         except:
+            with open(logPath, "a") as f:
+                f.write(f"error: { timeStamp }_{fun.__name__}\n")
+            f.close()
             pass
-        os.chdir(timeStamp)
-        for fun in [weather.getTempData, weather.getRainData, youbike.getData]:
-            try:
-                fun()
-            except:
-                with open(logPath, "a") as f:
-                    f.write(f"error: { timeStamp }_{fun.__name__}\n")
-                f.close()
-                pass
 
-        t = time.time() - t
-        time.sleep(interval - t)
-        
-        os.chdir("..")
+    os.chdir("..")
