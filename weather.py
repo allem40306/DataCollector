@@ -1,7 +1,6 @@
 import requests
 import json
 
-
 def getData(config):
     dataIn = json.loads(requests.get(f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-{ config['queryID'] }-001?Authorization=CWB-0D389C80-AB4C-4DE4-B6D4-DCC8EB71D8E8").text)["records"]["location"]
     dataOut = []
