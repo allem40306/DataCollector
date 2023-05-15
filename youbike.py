@@ -35,7 +35,7 @@ def valueTransform(val, L, R):
     return -100
 
 def generateFinalMatrix(dir):
-    youbikeIdDict = util.loadIdDict("youbike")
+    youbikeIdDict = util.loadIdDict("final/youbike.json", "sno")
     nearestList = util.generateNearestList()
     final = np.zeros((len(dir), len(youbikeIdDict), 5))
     for i in range(len(dir)):

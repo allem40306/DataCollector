@@ -41,12 +41,17 @@ def generateNearestList():
     nearestList = [[rainfallList[i], tempertureList[i]] for i in range(len(rainfallList))]
     return nearestList
 
-def loadData(pathname):
-    with open(pathname,"r") as file:
+def getCSV(url, filename):
+    res = requests.get(url)
+    with open(filename, "w") as file:
+        file.write(res.text)
+
+def loadData(filename):
+    with open(filename,"r") as file:
         data = json.load(file)
         file.close()
     return data
 
-def loadIdDict(category):
-    idDict = {item["sno"]: idx for idx, item in enumerate(loadData(f"final/{category}.json"))}
+def loadIdDict(filename, key):
+    idDict = {item[key]: idx for idx, item in enumerate(loadData(filename))}
     return idDict
