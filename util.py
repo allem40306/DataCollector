@@ -55,3 +55,9 @@ def loadData(filename):
 def loadIdDict(filename, key):
     idDict = {item[key]: idx for idx, item in enumerate(loadData(filename))}
     return idDict
+
+
+def valueTransform(val, L, R):
+    if val >= L and val <= R:
+        return val
+    return -100

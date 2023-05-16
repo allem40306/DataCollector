@@ -27,8 +27,10 @@ def getNearestWeatherInfo(weatherRecord):
         for loc, record in zip(weatherLocation, weatherRecord):
             tmp = distance.distance((c1['lat'], c1['lng']), (loc['lat'], loc['lng'])).km
             if tmp < rainD and record["RAIN"] >= -0.1:
+                rainD = tmp
                 rainV = record["RAIN"]
             if tmp < tempD and record["TEMP"] >= -0.1:
+                tempD = tmp
                 tempV = record["TEMP"]
         rain[mrtStationDict[c1["station"]]] = rainV
         temp[mrtStationDict[c1["station"]]] = tempV
@@ -36,6 +38,9 @@ def getNearestWeatherInfo(weatherRecord):
     return rain, temp
 
 def generateFinalMatrix(day):
+    mrt.json2npz(day)
+    weather.monthlyStationsRecord(day)
+
     beginDay = day
     endDay = day + relativedelta(months=1)
     month = str(day)[:7].replace("-", "")
@@ -59,17 +64,17 @@ def generateFinalMatrix(day):
     for i in range(numOfday):
         iteratedDay = beginDay + relativedelta(days=i)
         weekday = iteratedDay.weekday()
-        print(iteratedDay)
+        print(f"finalMatrix: {iteratedDay}")
         for j in range(24):
             timeStamp = i * 24 + j
             inFlow = np.sum(mrtFlow[timeStamp], axis=0)
             outFlow = np.sum(mrtFlow[timeStamp], axis=1)
             rain, temp = getNearestWeatherInfo(weatherRecord[i][j])
             for k in range(numOfStation):
-                final[timeStamp][k][0] = inFlow[k]
-                final[timeStamp][k][1] = outFlow[k]
-                final[timeStamp][k][2] = rain[k]
-                final[timeStamp][k][3] = temp[k]
+                final[timeStamp][k][0] = max(inFlow[k], 0)
+                final[timeStamp][k][1] = max(outFlow[k], 0)
+                final[timeStamp][k][2] = util.valueTransform(rain[k], 0, 210)
+                final[timeStamp][k][3] = util.valueTransform(temp[k], -5, 45)
                 final[timeStamp][k][4] = weekday
                 final[timeStamp][k][5] = j + 1
 
@@ -78,9 +83,8 @@ def generateFinalMatrix(day):
 if __name__ == "__main__":
     os.chdir("data_MRT")
 
-    day = dt.datetime.strptime('2017-01-01','%Y-%m-%d').date()
+    day = dt.datetime.strptime('2017-10-01','%Y-%m-%d').date()
     endDay = dt.datetime.strptime('2023-03-31','%Y-%m-%d').date()
-    stations = util.loadData("weatherStation.json")
    
     try:
         os.mkdir("weatherRecord")
@@ -88,8 +92,5 @@ if __name__ == "__main__":
         pass
 
     while day <= endDay:
-        mrt.json2npz(day)
-        weather.monthlyStationsRecord(day, stations)
         generateFinalMatrix(day)
         day = day + relativedelta(months=1)
-        break

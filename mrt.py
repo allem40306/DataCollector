@@ -67,5 +67,5 @@ def json2npz(day):
             assert(flowMatrix[i][j][k] == 0)
             flowMatrix[i][j][k] = v
 
-    print(flowMatrix.shape)
     np.savez_compressed(f"mrtFlowNpz/{month}.npz", x=flowMatrix)
+    print(f"save mrtFlowNpz/{month}.npz")

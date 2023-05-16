@@ -29,11 +29,6 @@ def generateDistanceMatrix(dataField):
 
     np.savez_compressed(f"final/youbike_{dataField}_distance.npz", x=distanceMatrix)
 
-def valueTransform(val, L, R):
-    if val >= L and val <= R:
-        return val
-    return -100
-
 def generateFinalMatrix(dir):
     youbikeIdDict = util.loadIdDict("final/youbike.json", "sno")
     nearestList = util.generateNearestList()
@@ -45,11 +40,11 @@ def generateFinalMatrix(dir):
         for item in youbikeData:
             j = youbikeIdDict[item["sno"]]
             rainfallIdx, tempertureIdx = [int(idx) for idx in nearestList[j]]
-            final[i][j][0] = valueTransform(item["sbi"], 0, item["tot"])
-            final[i][j][1] = valueTransform(rainfallData[rainfallIdx]["MIN_10"], 0, 50)
-            final[i][j][2] = valueTransform(rainfallData[rainfallIdx]["RAIN"], 0, 210)
-            final[i][j][3] = valueTransform(rainfallData[rainfallIdx]["HOUR_3"], 0, 600)
-            final[i][j][4] = valueTransform(tempertureData[tempertureIdx]["TEMP"], 5, 45)
+            final[i][j][0] = util.valueTransform(item["sbi"], 0, item["tot"])
+            final[i][j][1] = util.valueTransform(rainfallData[rainfallIdx]["MIN_10"], 0, 50)
+            final[i][j][2] = util.valueTransform(rainfallData[rainfallIdx]["RAIN"], 0, 210)
+            final[i][j][3] = util.valueTransform(rainfallData[rainfallIdx]["HOUR_3"], 0, 600)
+            final[i][j][4] = util.valueTransform(tempertureData[tempertureIdx]["TEMP"], 5, 45)
     print(final.shape)
     np.savez_compressed(f"final/final.npz", x = final)
  

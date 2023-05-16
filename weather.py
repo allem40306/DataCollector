@@ -2,6 +2,7 @@ import requests
 import json
 import urllib
 import datetime as dt
+import util
 from bs4 import BeautifulSoup
 from dateutil.relativedelta import relativedelta
 
@@ -51,15 +52,15 @@ def dailyStationRecord(day, station):
         weatherRecord.append({"hour": tmp[0], "TEMP": float(tmp[3]), "RAIN": float(tmp[10])})
     return weatherRecord
 
-def monthlyStationsRecord(day, stations):
+def monthlyStationsRecord(day):
     beginDay = day
     endDay = day + relativedelta(months=1)
     month = str(day)[:7].replace("-", "")
-    print(beginDay, endDay)
-
+    
+    stations = util.loadData("weatherStation.json")
     monthRecord = []
     while beginDay < endDay:
-        print(beginDay)
+        print(f"StationsRecord: {beginDay}")
         dayRecord = [[] for i in range(24)]
         for station in stations:
             if (station["from"] <= str(beginDay) and (station["to"] == "" or str(beginDay) <= station["to"])) == False:
@@ -70,9 +71,9 @@ def monthlyStationsRecord(day, stations):
         monthRecord.append(dayRecord)
         beginDay = beginDay + dt.timedelta(days=1)
 
-    print(f"weatherRecord/{month}.json")
     with open(f"weatherRecord/{month}.json", "w") as file:
         json.dump(monthRecord, file)
+    print(f"save weatherRecord/{month}.json")
 
 def getData(config):
     dataIn = json.loads(requests.get(f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-{ config['queryID'] }-001?Authorization=CWB-0D389C80-AB4C-4DE4-B6D4-DCC8EB71D8E8").text)["records"]["location"]
