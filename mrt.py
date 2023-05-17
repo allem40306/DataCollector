@@ -9,7 +9,7 @@ from dateutil.relativedelta import relativedelta
 # https://www.delftstack.com/zh-tw/howto/python/python-download-csv-from-url/
 def getCsv():
     infilename = "mrtDataUrlList.csv"
-    util.getCSV("https://data.taipei/api/dataset/63f31c7e-7fc3-418b-bd82-b95158755b4d/resource/eb481f58-1238-4cff-8caa-fa7bb20cb4f4/download", infilename)
+    util.getCSVutf8("https://data.taipei/api/dataset/63f31c7e-7fc3-418b-bd82-b95158755b4d/resource/eb481f58-1238-4cff-8caa-fa7bb20cb4f4/download", infilename)
     with open(infilename, "r", encoding="utf8") as file:
         spamreader = csv.reader(file, delimiter=' ', quotechar='|')
         for idx, row in enumerate(spamreader):
@@ -17,12 +17,11 @@ def getCsv():
                 continue
             url = row[0].split(",")[1]
             filename = url.split("_")[-1]
-            util.getCSV(url, f"mrtFlowCsv/{filename}")
+            util.getCSVutf8(url, f"mrtFlowCsv/{filename}")
 
 def getStation():
     infilename = "mrtStationEntrance.csv"
     outfilename = "mrtStation.json"
-    util.getCSV("https://data.taipei/api/dataset/cfa4778c-62c1-497b-b704-756231de348b/resource/307a7f61-e302-4108-a817-877ccbfca7c1/download", infilename)
     if os.path.isfile(outfilename):
         os.remove(outfilename)
 
@@ -55,6 +54,7 @@ def json2npz(day):
     numOfday = int((endDay - beginDay).days)
 
     mrtStationDict = util.loadIdDict("mrtStation.json", "station")
+    print(mrtStationDict)
     numOfStation = len(mrtStationDict)
 
     flowMatrix = np.zeros([numOfday * 24, numOfStation, numOfStation]) 
