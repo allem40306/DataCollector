@@ -26,6 +26,7 @@ def weatherStation():
     with open("weatherStation.json", "w") as file:
         json.dump(stations, file)
         file.close()
+    print("save weatherStation.json")
 
 def dailyStationRecord(day, station):
     location = urllib.parse.quote(station["name"])

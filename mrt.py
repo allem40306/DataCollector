@@ -8,7 +8,9 @@ from dateutil.relativedelta import relativedelta
 
 # https://www.delftstack.com/zh-tw/howto/python/python-download-csv-from-url/
 def getCsv():
-    with open("mrtDataUrlList.csv", "r", encoding="utf8") as file:
+    infilename = "mrtDataUrlList.csv"
+    util.getCSV("https://data.taipei/api/dataset/63f31c7e-7fc3-418b-bd82-b95158755b4d/resource/eb481f58-1238-4cff-8caa-fa7bb20cb4f4/download", infilename)
+    with open(infilename, "r", encoding="utf8") as file:
         spamreader = csv.reader(file, delimiter=' ', quotechar='|')
         for idx, row in enumerate(spamreader):
             if idx == 0:
@@ -20,6 +22,7 @@ def getCsv():
 def getStation():
     infilename = "mrtStationEntrance.csv"
     outfilename = "mrtStation.json"
+    util.getCSV("https://data.taipei/api/dataset/cfa4778c-62c1-497b-b704-756231de348b/resource/307a7f61-e302-4108-a817-877ccbfca7c1/download", infilename)
     if os.path.isfile(outfilename):
         os.remove(outfilename)
 
@@ -43,6 +46,7 @@ def getStation():
     with open(outfilename, "a", encoding="utf8") as file:
         json.dump(stations, file)
         file.close()
+    print(f"save {outfilename}")
 
 def json2npz(day):
     beginDay = day

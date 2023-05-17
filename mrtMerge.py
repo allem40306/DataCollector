@@ -83,9 +83,13 @@ def generateFinalMatrix(day):
 if __name__ == "__main__":
     os.chdir("data_MRT")
 
-    day = dt.datetime.strptime('2017-10-01','%Y-%m-%d').date()
+    # mrt.getCsv()
+    mrt.getStation()
+    weather.weatherStation()
+
+    day = dt.datetime.strptime('2017-01-01','%Y-%m-%d').date()
     endDay = dt.datetime.strptime('2023-03-31','%Y-%m-%d').date()
-   
+
     try:
         os.mkdir("weatherRecord")
     except:
