@@ -60,6 +60,8 @@ def json2npz(day):
             if len(row) == 0 or idx <= 0:
                 continue
             data = row[0].split(',')
+            if month not in "".join(data[0].split('-')):
+                continue
             i = (int(data[0].split('-')[2]) - 1) * 24 + int(data[1])
             j = mrtStationDict[data[2].replace("站", "")]
             k = mrtStationDict[data[3].replace("站", "")]
