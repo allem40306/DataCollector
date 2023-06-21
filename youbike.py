@@ -67,18 +67,15 @@ def generateFinalMatrix(dir):
         for item in youbikeData:
             j = youbikeIdDict[item["sno"]]
             rainfallIdx, tempertureIdx = rainfallNearestList[j], tempertureNearestList[j]
-            try:
-                final[i][j][0] = util.valueTransform(item["sbi"], 0, item["tot"], final[i - 1][j][0] if i > 0 else 0)
-                final[i][j][1] = util.valueTransform(rainfallData[rainfallIdx]["MIN_10"], 0, 50, 0)
-                final[i][j][2] = util.valueTransform(rainfallData[rainfallIdx]["RAIN"], 0, 210, 0)
-                final[i][j][3] = util.valueTransform(rainfallData[rainfallIdx]["HOUR_3"], 0, 600, 0)
-                final[i][j][4] = util.valueTransform(tempertureData[tempertureIdx]["TEMP"], 5, 45, final[i - 1][j][4] if i > 0 else 0)
-                final[i][j][5] = nowDay
-                final[i][j][6] = nowTime
-            except:
-                print(dir[i], rainfallIdx, tempertureIdx, len(rainfallData), len(tempertureData))
-                print(tempertureData)
-                return
+            
+            # remaining space, 10 mins rainfall, 1 hour rainfall, 3 hours rainfall, temperture, weekday, hours
+            final[i][j][0] = util.valueTransform(item["sbi"], 0, item["tot"], final[i - 1][j][0] if i > 0 else 0)
+            final[i][j][1] = util.valueTransform(rainfallData[rainfallIdx]["MIN_10"], 0, 50, 0)
+            final[i][j][2] = util.valueTransform(rainfallData[rainfallIdx]["RAIN"], 0, 210, 0)
+            final[i][j][3] = util.valueTransform(rainfallData[rainfallIdx]["HOUR_3"], 0, 600, 0)
+            final[i][j][4] = util.valueTransform(tempertureData[tempertureIdx]["TEMP"], 5, 45, final[i - 1][j][4] if i > 0 else 0)
+            final[i][j][5] = nowDay
+            final[i][j][6] = nowTime
             
     np.savez_compressed(f"final/Youbike.npz", data = final)
  

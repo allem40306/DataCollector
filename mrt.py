@@ -121,8 +121,8 @@ def generateMonthlyMatrix(beginDay):
     month = str(beginDay)[:7].replace("-", "")
     numOfday = int((endDay - beginDay).days)
 
-    # json2npz(beginDay)
-    # weather.monthlyStationsRecord(beginDay)
+    json2npz(beginDay)
+    weather.monthlyStationsRecord(beginDay)
 
     try:
         os.mkdir("final")
@@ -148,7 +148,7 @@ def generateMonthlyMatrix(beginDay):
             outFlow = np.sum(mrtFlow[timeStamp], axis=1)
             rain, temp = getNearestWeatherInfo(weatherRecord[i][j])
             
-            # inflow, outflow, rain, temp, weekday, hours
+            # inflow, outflow, 1 hour rainfall, temperture, weekday, hours
             for k in range(numOfStation):
                 final[timeStamp][k][0] = max(inFlow[k], 0)
                 final[timeStamp][k][1] = max(outFlow[k], 0)
