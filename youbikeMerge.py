@@ -3,9 +3,9 @@ import youbike
 import weather
 import util
 
-dir = [f"{d}" for d in os.listdir("./data") if os.path.isdir(f"./data/{d}") and "final" not in d]
+dir = [f"./data_Youbike/{d}" for d in os.listdir("./data_Youbike/json") if os.path.isdir(f"./data_Youbike/json/{d}")]
 
-os.chdir("data")
+os.chdir("data_Youbike")
 try:
     os.mkdir("final")
 except:
@@ -22,5 +22,6 @@ for category in ["youbike", "rainfall", "temperture"]:
     youbike.generateDistanceMatrix(category)
 
 youbike.generateFinalMatrix(dir)
+util.generateDistanceCsv("final/Youbike.csv", "final/Youbike.csv", "final/Youbike.csv")
 
 os.chdir("..")

@@ -61,7 +61,7 @@ def monthlyStationsRecord(day):
     stations = util.loadData("weatherStation.json")
     monthRecord = []
     while beginDay < endDay:
-        print(f"StationsRecord: {beginDay}")
+        print(f"Weather Stations Record: {beginDay}")
         dayRecord = [[] for i in range(24)]
         for station in stations:
             if (station["from"] <= str(beginDay) and (station["to"] == "" or str(beginDay) <= station["to"])) == False:
