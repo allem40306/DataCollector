@@ -9,6 +9,7 @@
     - 經緯度、名稱、溫度
 
 ## `youbikeMerge.py`
+- 到 https://data.gov.tw/dataset/128428 下載 `.csv` 檔，重新命名為 `mrtStationEntrance.csv`
 - 輸出: `final/Youbike.npz`
     - 剩餘車位、10 分鐘累積雨量、1 小時累積雨量、3 小時累積雨量、溫度、一天當作的星期幾、時間
 - 輸出: `final/Youbike.csv`
@@ -19,3 +20,6 @@
     - 進站人次、出站人次、1 小時累積雨量、溫度、一天當作的星期幾、時間
 - 輸出: `final/MRT.csv`
     - 任兩個站點之間的距離
+
+## `pemsCsvConvert.py`
+- 將 PEMS distance 的 `.csv` 檔重新編號。
